@@ -30,6 +30,11 @@ const availableLines = [
   "tayside_cases"
 ]
 
+const colors = availableLines.reduce((map, obj) => {
+  map[obj] = randomcolor({ luminosity: 'light' });
+  return map;
+}, {});
+
 class App extends React.Component {
 
   constructor(props) {
@@ -112,14 +117,14 @@ class App extends React.Component {
                     <ResponsiveContainer width="90%" height="80%">
                       <LineChart data={this.transformChartData(data)} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
                         <CartesianGrid stroke="#ccc" />
-                        <Tooltip />
+                        <Tooltip contentStyle={{background: '#424242'}}/>
                         <XAxis dataKey="name" />
                         <YAxis />
                         {availableLines
                           .filter(line => this.state[line + "_enabled"] === true)
                           .map(line =>
                             (
-                              <Line type="monotone" dataKey={line} stroke={randomcolor()} key={line} />
+                              <Line type="monotone" dataKey={line} stroke={colors[line]} key={line} />
                             ))}
                       </LineChart>
                     </ResponsiveContainer>
