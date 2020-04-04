@@ -3,13 +3,15 @@ import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContai
 import { ApolloProvider, Query } from 'react-apollo';
 import client from './apollo';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import { GET_DATASETS, ORDERBY_DATE_ASC } from './queries/GetDatasets'
 import FormGroup from '@material-ui/core/FormGroup';
 import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import randomcolor from 'randomcolor';
 import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+import randomcolor from 'randomcolor';
+import { GET_DATASETS, ORDERBY_DATE_ASC } from './queries/GetDatasets'
 
 const availableLines = [
   "total_tests",
@@ -31,6 +33,26 @@ const availableLines = [
   "tayside_cases"
 ]
 
+const labels = {
+  "total_tests": "Total Tests",
+  "total_deaths": "Total Deaths",
+  "positive_tests": "Positive Tests",
+  "negative_tests": "Negative Tests",
+  "ayrshireandarran_cases": "Ayrshire and Arran Cases",
+  "borders_cases": "Borders Cases",
+  "dumfriesandgalloway_cases": "Dumfries and Galloway Cases",
+  "fife_cases": "Fife Cases",
+  "forthvalley_cases": "Forth Valley Cases",
+  "grampian_cases": "Grampian Cases",
+  "greaterglasgowandclyde_cases": "Greater Glasgow and Clyde Cases",
+  "highland_cases": "Highland Cases",
+  "lanarkshire_cases": "Lanarkshire Cases",
+  "lothian_cases": "Lothian Cases",
+  "orkney_cases": "Orkney Cases",
+  "shetland_cases": "Shetland Cases",
+  "tayside_cases": "Tayside Cases"
+};
+
 const colors = availableLines.reduce((map, obj) => {
   map[obj] = randomcolor({ luminosity: 'light' });
   return map;
@@ -49,11 +71,15 @@ class App extends React.Component {
     }, {});
   }
 
+  selectAllChannels(value){     
+    this.setState(Object.keys(this.state).reduce((p, c) => ({...p, [c]: value}), {}));
+  }
+
   transformChartData(data) {
     let chartData = [];
     data.datasets.nodes.forEach((set, _) => {
       let dataset = {
-        name: set.date.split("T")[0],
+        date: set.date.split("T")[0],
         total_deaths: set.totalDeaths,
         total_tests: set.totalTests,
         positive_tests: set.positiveTests,
@@ -92,15 +118,20 @@ class App extends React.Component {
               </Grid>
               <Grid item sm={2}>
                 <Paper style={{ marginLeft: 10 }}>
+                  <Typography variant="h6" style={{ textAlign: "center", margin: 5 }}>Data Channels</Typography>
                   <FormGroup style={{ padding: 5 }}>
                     {availableLines.map(line =>
                       (
                         <FormControlLabel
                           control={<Checkbox checked={this.state[line + "_enabled"]} onChange={this.handleChange} name={line + "_enabled"} />}
-                          label={line.replace('_', ' ')}
+                          label={labels[line]}
                           key={line}
                         />
                       ))}
+                    <ButtonGroup variant="contained" color="primary" style={{width: "100%"}}>
+                      <Button onClick={() => this.selectAllChannels(true)} style={{width: "100%"}}>Select all</Button>
+                      <Button onClick={() => this.selectAllChannels(false)} style={{width: "100%"}}>Deselect all</Button>
+                    </ButtonGroup>
                   </FormGroup>
                 </Paper>
               </Grid>
@@ -117,17 +148,17 @@ class App extends React.Component {
                     width: '100%',
                     height: '100%'
                   }}>
-                    <ResponsiveContainer width="90%" height="80%">
+                    <ResponsiveContainer width="95%" height="90%">
                       <LineChart data={this.transformChartData(data)} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
                         <CartesianGrid stroke="#ccc" />
                         <Tooltip contentStyle={{ background: '#424242' }} />
-                        <XAxis dataKey="name" />
+                        <XAxis dataKey="date" />
                         <YAxis />
                         {availableLines
                           .filter(line => this.state[line + "_enabled"] === true)
                           .map(line =>
                             (
-                              <Line type="monotone" dataKey={line} stroke={colors[line]} key={line} />
+                              <Line type="monotone" dataKey={line} name={labels[line]} stroke={colors[line]} key={line} />
                             ))}
                       </LineChart>
                     </ResponsiveContainer>
