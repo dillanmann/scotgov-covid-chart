@@ -117,7 +117,7 @@ class App extends React.Component {
                 <Typography variant="h3">ScotGov COVID-19 Data</Typography>
               </Grid>
               <Grid item sm={2}>
-                <Paper style={{ marginLeft: 10 }}>
+                <Paper style={{ marginLeft: 30 }}>
                   <Typography variant="h6" style={{ textAlign: "center", margin: 5 }}>Data Channels</Typography>
                   <FormGroup style={{ padding: 5 }}>
                     {availableLines.map(line =>
@@ -149,7 +149,7 @@ class App extends React.Component {
                     height: '100%'
                   }}>
                     <ResponsiveContainer width="95%" height="90%">
-                      <LineChart data={this.transformChartData(data)} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                      <LineChart data={this.transformChartData(data)} margin={{ top: 5, right: 30, bottom: 5 }}>
                         <CartesianGrid stroke="#ccc" />
                         <Tooltip contentStyle={{ background: '#424242' }} />
                         <XAxis dataKey="date" />
