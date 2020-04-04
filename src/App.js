@@ -10,6 +10,9 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
+import BottomNavigation from '@material-ui/core/BottomNavigation';
+import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
+import GitHubIcon from '@material-ui/icons/GitHub';
 import randomcolor from 'randomcolor';
 import { GET_DATASETS, ORDERBY_DATE_ASC } from './queries/GetDatasets'
 
@@ -71,8 +74,8 @@ class App extends React.Component {
     }, {});
   }
 
-  selectAllChannels(value){     
-    this.setState(Object.keys(this.state).reduce((p, c) => ({...p, [c]: value}), {}));
+  selectAllChannels(value) {
+    this.setState(Object.keys(this.state).reduce((p, c) => ({ ...p, [c]: value }), {}));
   }
 
   transformChartData(data) {
@@ -128,42 +131,33 @@ class App extends React.Component {
                           key={line}
                         />
                       ))}
-                    <ButtonGroup variant="contained" color="primary" style={{width: "100%"}}>
-                      <Button onClick={() => this.selectAllChannels(true)} style={{width: "100%"}}>Select all</Button>
-                      <Button onClick={() => this.selectAllChannels(false)} style={{width: "100%"}}>Deselect all</Button>
+                    <ButtonGroup variant="contained" color="primary" style={{ width: "100%" }}>
+                      <Button onClick={() => this.selectAllChannels(true)} style={{ width: "100%" }}>Select all</Button>
+                      <Button onClick={() => this.selectAllChannels(false)} style={{ width: "100%" }}>Deselect all</Button>
                     </ButtonGroup>
                   </FormGroup>
                 </Paper>
               </Grid>
               <Grid item sm={10}>
-                <div style={{
-                  paddingBottom: '56.25%', /* 16:9 */
-                  position: 'relative',
-                  height: 0
-                }} >
-                  <div style={{
-                    position: 'absolute',
-                    top: '0',
-                    left: '0',
-                    width: '100%',
-                    height: '100%'
-                  }}>
-                    <ResponsiveContainer width="95%" height="90%">
-                      <LineChart data={this.transformChartData(data)} margin={{ top: 5, right: 30, bottom: 5 }}>
-                        <CartesianGrid stroke="#ccc" />
-                        <Tooltip contentStyle={{ background: '#424242' }} />
-                        <XAxis dataKey="date" />
-                        <YAxis />
-                        {availableLines
-                          .filter(line => this.state[line + "_enabled"] === true)
-                          .map(line =>
-                            (
-                              <Line type="monotone" dataKey={line} name={labels[line]} stroke={colors[line]} key={line} />
-                            ))}
-                      </LineChart>
-                    </ResponsiveContainer>
-                  </div>
-                </div>
+                <ResponsiveContainer>
+                  <LineChart data={this.transformChartData(data)} margin={{ top: 5, right: 30, bottom: 5 }}>
+                    <CartesianGrid stroke="#ccc" />
+                    <Tooltip contentStyle={{ background: '#424242' }} />
+                    <XAxis dataKey="date" />
+                    <YAxis />
+                    {availableLines
+                      .filter(line => this.state[line + "_enabled"] === true)
+                      .map(line =>
+                        (
+                          <Line type="monotone" dataKey={line} name={labels[line]} stroke={colors[line]} key={line} />
+                        ))}
+                  </LineChart>
+                </ResponsiveContainer>
+              </Grid>
+              <Grid item sm={12}>
+                <BottomNavigation style={{ width: '100%', position: 'fixed', bottom: 0}}>
+                  <BottomNavigationAction icon={<GitHubIcon />} href="https://github.com/dillanmann/scotgov-covid-chart"></BottomNavigationAction>
+                </BottomNavigation>
               </Grid>
             </Grid>
           )}
