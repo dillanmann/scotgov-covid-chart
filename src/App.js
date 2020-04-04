@@ -2,41 +2,13 @@ import React from 'react';
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { ApolloProvider, Query } from 'react-apollo';
 import client from './apollo';
-import gql from 'graphql-tag';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import { GET_DATASETS, ORDERBY_DATE_ASC } from './queries/GetDatasets'
 import FormGroup from '@material-ui/core/FormGroup';
 import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import randomcolor from 'randomcolor';
-
-const GET_DATASETS = gql`query GetDatasets($order: DatasetsSort!){
-  datasets(order_by: $order)
-  {
-    nodes{
-      date,
-      totalTests,
-      totalDeaths,
-      positiveTests,
-      negativeTests,
-    	ayrshireandarranCases,
-    	bordersCases,
-    	dumfriesandgallowayCases,
-    	fifeCases,
-    	forthvalleyCases,
-    	grampianCases,
-    	greaterglasgowandclydeCases,
-    	highlandCases,
-    	lanarkshireCases,
-    	lothianCases,
-    	orkneyCases,
-    	shetlandCases,
-    	taysideCases
-    }
-  }
-}`;
-
-const ORDERBY_DATE_ASC = {"order": {"date": "ASC" }};
 
 const availableLines = [
   "total_tests",
@@ -60,7 +32,7 @@ const availableLines = [
 
 class App extends React.Component {
 
-  constructor(props){
+  constructor(props) {
     super(props);
 
     // build state checkbox items out of the available data
@@ -69,10 +41,9 @@ class App extends React.Component {
       map[key] = false;
       return map;
     }, {});
-    console.log(this.state);
-  }  
+  }
 
-  transformChartData(data){
+  transformChartData(data) {
     let chartData = [];
     data.datasets.nodes.forEach((set, _) => {
       let dataset = {
@@ -104,63 +75,63 @@ class App extends React.Component {
     this.setState({ ...this.state, [event.target.name]: event.target.checked });
   };
 
-  render(){
-      return (
-        <ApolloProvider client={client}>
+  render() {
+    return (
+      <ApolloProvider client={client}>
         <Query query={GET_DATASETS} variables={ORDERBY_DATE_ASC}>
-        {({ loading, data, refetch }) => !loading &&(
-          <Grid container>
-            <Grid item sm={12} style={{textAlign: "center", margin: 5}}>
-              <Typography variant="h3">ScotGov COVID-19 Data</Typography>
-            </Grid>
-            <Grid item sm={2}>
-              <FormGroup style={{marginLeft: 10}}>
-              {availableLines.map(line => 
-              (
-                <FormControlLabel
-                  control={<Checkbox checked={this.state[line + "_enabled"]} onChange={this.handleChange} name={line + "_enabled"} />}
-                  label={line.replace('_', ' ')}
-                  key={line}
-                />
-              ))}
-              </FormGroup>
-            </Grid>
-            <Grid item sm={10}>
-            <div style={{
-            paddingBottom: '56.25%', /* 16:9 */
-            position: 'relative',
-            height: 0
-          }} >
-            <div style={{
-              position: 'absolute',
-              top: '0',
-              left: '0',
-              width: '100%',
-              height: '100%'
-            }}>
-              <ResponsiveContainer width="90%" height="80%">
-                          <LineChart data={this.transformChartData(data)} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-                            <CartesianGrid stroke="#ccc" />
-                            <Tooltip />
-                            <XAxis dataKey="name" />
-                            <YAxis />
-                            {availableLines
-                            .filter(line => this.state[line + "_enabled"] === true)
-                            .map(line => 
+          {({ loading, data, refetch }) => !loading && (
+            <Grid container>
+              <Grid item sm={12} style={{ textAlign: "center", margin: 5 }}>
+                <Typography variant="h3">ScotGov COVID-19 Data</Typography>
+              </Grid>
+              <Grid item sm={2}>
+                <FormGroup style={{ marginLeft: 10 }}>
+                  {availableLines.map(line =>
+                    (
+                      <FormControlLabel
+                        control={<Checkbox checked={this.state[line + "_enabled"]} onChange={this.handleChange} name={line + "_enabled"} />}
+                        label={line.replace('_', ' ')}
+                        key={line}
+                      />
+                    ))}
+                </FormGroup>
+              </Grid>
+              <Grid item sm={10}>
+                <div style={{
+                  paddingBottom: '56.25%', /* 16:9 */
+                  position: 'relative',
+                  height: 0
+                }} >
+                  <div style={{
+                    position: 'absolute',
+                    top: '0',
+                    left: '0',
+                    width: '100%',
+                    height: '100%'
+                  }}>
+                    <ResponsiveContainer width="90%" height="80%">
+                      <LineChart data={this.transformChartData(data)} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                        <CartesianGrid stroke="#ccc" />
+                        <Tooltip />
+                        <XAxis dataKey="name" />
+                        <YAxis />
+                        {availableLines
+                          .filter(line => this.state[line + "_enabled"] === true)
+                          .map(line =>
                             (
                               <Line type="monotone" dataKey={line} stroke={randomcolor()} key={line} />
                             ))}
-                          </LineChart>
-              </ResponsiveContainer>
-              </div>
-          </div>
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
               </Grid>
-              </Grid>
+            </Grid>
           )}
         </Query>
       </ApolloProvider>
-      );
-    }
+    );
+  }
 }
 
 export default App;
