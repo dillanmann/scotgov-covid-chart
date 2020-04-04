@@ -1,8 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import Button from '@material-ui/core/Button';
-import Container from '@material-ui/core/Container';
 import { ApolloProvider, Query } from 'react-apollo';
 import client from './apollo';
 import gql from 'graphql-tag';
@@ -11,6 +8,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import randomcolor from 'randomcolor';
 
 const GET_DATASETS = gql`query GetDatasets($order: DatasetsSort!){
   datasets(order_by: $order)
@@ -66,11 +64,12 @@ class App extends React.Component {
     super(props);
 
     // build state checkbox items out of the available data
-    this.state = availableLines.reduce(function(map, obj) {
-      var key = obj.key + "_enabled";
+    this.state = availableLines.reduce((map, obj) => {
+      var key = obj + "_enabled";
       map[key] = false;
       return map;
     }, {});
+    console.log(this.state);
   }  
 
   transformChartData(data){
@@ -110,7 +109,7 @@ class App extends React.Component {
         <ApolloProvider client={client}>
         <Query query={GET_DATASETS} variables={ORDERBY_DATE_ASC}>
         {({ loading, data, refetch }) => !loading &&(
-          <Grid container spacing>
+          <Grid container>
             <Grid item sm={12} style={{textAlign: "center", margin: 5}}>
               <Typography variant="h3">ScotGov COVID-19 Data</Typography>
             </Grid>
@@ -149,7 +148,7 @@ class App extends React.Component {
                             .filter(line => this.state[line + "_enabled"] === true)
                             .map(line => 
                             (
-                              <Line type="monotone" dataKey={line} key={line} />
+                              <Line type="monotone" dataKey={line} stroke={randomcolor()} key={line} />
                             ))}
                           </LineChart>
               </ResponsiveContainer>
