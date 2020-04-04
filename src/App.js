@@ -9,6 +9,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import randomcolor from 'randomcolor';
+import Paper from '@material-ui/core/Paper';
 
 const availableLines = [
   "total_tests",
@@ -90,16 +91,18 @@ class App extends React.Component {
                 <Typography variant="h3">ScotGov COVID-19 Data</Typography>
               </Grid>
               <Grid item sm={2}>
-                <FormGroup style={{ marginLeft: 10 }}>
-                  {availableLines.map(line =>
-                    (
-                      <FormControlLabel
-                        control={<Checkbox checked={this.state[line + "_enabled"]} onChange={this.handleChange} name={line + "_enabled"} />}
-                        label={line.replace('_', ' ')}
-                        key={line}
-                      />
-                    ))}
-                </FormGroup>
+                <Paper style={{ marginLeft: 10 }}>
+                  <FormGroup style={{ padding: 5 }}>
+                    {availableLines.map(line =>
+                      (
+                        <FormControlLabel
+                          control={<Checkbox checked={this.state[line + "_enabled"]} onChange={this.handleChange} name={line + "_enabled"} />}
+                          label={line.replace('_', ' ')}
+                          key={line}
+                        />
+                      ))}
+                  </FormGroup>
+                </Paper>
               </Grid>
               <Grid item sm={10}>
                 <div style={{
@@ -117,7 +120,7 @@ class App extends React.Component {
                     <ResponsiveContainer width="90%" height="80%">
                       <LineChart data={this.transformChartData(data)} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
                         <CartesianGrid stroke="#ccc" />
-                        <Tooltip contentStyle={{background: '#424242'}}/>
+                        <Tooltip contentStyle={{ background: '#424242' }} />
                         <XAxis dataKey="name" />
                         <YAxis />
                         {availableLines
