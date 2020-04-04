@@ -2,16 +2,10 @@ import React from 'react';
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { ApolloProvider, Query } from 'react-apollo';
 import client from './apollo';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormGroup from '@material-ui/core/FormGroup';
-import Checkbox from '@material-ui/core/Checkbox';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import BottomNavigation from '@material-ui/core/BottomNavigation';
-import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
+import {
+  FormControlLabel, FormGroup, Checkbox, Grid, Typography, Paper, Button, ButtonGroup,
+  BottomNavigation, BottomNavigationAction, Radio, RadioGroup, FormLabel
+} from '@material-ui/core';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import randomcolor from 'randomcolor';
 import { GET_DATASETS, ORDERBY_DATE_ASC } from './queries/GetDatasets'
@@ -72,10 +66,11 @@ class App extends React.Component {
       map[key] = false;
       return map;
     }, {});
+    this.state.graphScale = 'linear';
   }
 
   selectAllChannels(value) {
-    this.setState(Object.keys(this.state).reduce((p, c) => ({ ...p, [c]: value }), {}));
+    this.setState(Object.keys(this.state).filter(item => item !== 'graphScale').reduce((p, c) => ({ ...p, [c]: value }), {}));
   }
 
   transformChartData(data) {
@@ -106,8 +101,12 @@ class App extends React.Component {
     return chartData;
   }
 
-  handleChange = (event) => {
+  handleCheckboxChange = (event) => {
     this.setState({ ...this.state, [event.target.name]: event.target.checked });
+  };
+
+  setGraphScale = (event) => {
+    this.setState({ [event.target.name]: event.target.value });
   };
 
   render() {
@@ -126,7 +125,7 @@ class App extends React.Component {
                     {availableLines.map(line =>
                       (
                         <FormControlLabel
-                          control={<Checkbox checked={this.state[line + "_enabled"]} onChange={this.handleChange} name={line + "_enabled"} />}
+                          control={<Checkbox checked={this.state[line + "_enabled"]} onChange={this.handleCheckboxChange} name={line + "_enabled"} />}
                           label={labels[line]}
                           key={line}
                         />
@@ -135,6 +134,13 @@ class App extends React.Component {
                       <Button onClick={() => this.selectAllChannels(true)} style={{ width: "100%" }}>Select all</Button>
                       <Button onClick={() => this.selectAllChannels(false)} style={{ width: "100%" }}>Deselect all</Button>
                     </ButtonGroup>
+                    <RadioGroup row aria-label="graph-scale" name="graphScale" value={this.state.graphScale} onChange={this.setGraphScale}>
+                      <FormLabel style={{display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: 20, marginLeft: 10 }}>
+                        <Typography variant="button">Scale:</Typography>
+                      </FormLabel>
+                      <FormControlLabel value="log" control={<Radio />} label="log" />
+                      <FormControlLabel value="linear" control={<Radio />} label="linear" />
+                    </RadioGroup>
                   </FormGroup>
                 </Paper>
               </Grid>
@@ -144,7 +150,7 @@ class App extends React.Component {
                     <CartesianGrid stroke="#ccc" />
                     <Tooltip contentStyle={{ background: '#424242' }} />
                     <XAxis dataKey="date" />
-                    <YAxis />
+                    <YAxis scale={this.state.graphScale} domain={['auto', 'auto']} />
                     {availableLines
                       .filter(line => this.state[line + "_enabled"] === true)
                       .map(line =>
@@ -155,7 +161,7 @@ class App extends React.Component {
                 </ResponsiveContainer>
               </Grid>
               <Grid item sm={12}>
-                <BottomNavigation style={{ width: '100%', position: 'fixed', bottom: 0}}>
+                <BottomNavigation style={{ width: '100%', position: 'fixed', bottom: 0, maxHeight: 45 }}>
                   <BottomNavigationAction icon={<GitHubIcon />} href="https://github.com/dillanmann/scotgov-covid-chart"></BottomNavigationAction>
                 </BottomNavigation>
               </Grid>
