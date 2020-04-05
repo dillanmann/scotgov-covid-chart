@@ -4,4 +4,4 @@ React Web UI using [Material UI](https://material-ui.com/) and [Recharts](https:
 
 Leverages a [GraphQL API](https://github.com/dillanmann/scotgov-covid-web) which is fed data by a [Python data scraper](https://github.com/dillanmann/scotgov-covid-scraper).
 
-Contact: dillan.mann@gmail.com
+Contact: [@dillanmann](https://twitter.com/dillanmann)

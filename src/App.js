@@ -6,51 +6,51 @@ import {
   FormControlLabel, FormGroup, Checkbox, Grid, Typography, Paper, Button, ButtonGroup,
   BottomNavigation, BottomNavigationAction, Radio, RadioGroup, FormLabel
 } from '@material-ui/core';
-import GitHubIcon from '@material-ui/icons/GitHub';
+import { GitHub, Twitter } from '@material-ui/icons';
 import randomcolor from 'randomcolor';
 import { GET_DATASETS, ORDERBY_DATE_ASC } from './queries/GetDatasets'
 
-const availableLines = [
-  "total_tests",
-  "total_deaths",
-  "positive_tests",
-  "negative_tests",
-  "ayrshireandarran_cases",
-  "borders_cases",
-  "dumfriesandgalloway_cases",
-  "fife_cases",
-  "forthvalley_cases",
-  "grampian_cases",
-  "greaterglasgowandclyde_cases",
-  "highland_cases",
-  "lanarkshire_cases",
-  "lothian_cases",
-  "orkney_cases",
-  "shetland_cases",
-  "tayside_cases"
+const allDataChannels = [
+  "totalTests",
+  "totalDeaths",
+  "positiveTests",
+  "negativeTests",
+  "ayrshireandarranCases",
+  "bordersCases",
+  "dumfriesandgallowayCases",
+  "fifeCases",
+  "forthvalleyCases",
+  "grampianCases",
+  "greaterglasgowandclydeCases",
+  "highlandCases",
+  "lanarkshireCases",
+  "lothianCases",
+  "orkneyCases",
+  "shetlandCases",
+  "taysideCases"
 ]
 
 const labels = {
-  "total_tests": "Total Tests",
-  "total_deaths": "Total Deaths",
-  "positive_tests": "Positive Tests",
-  "negative_tests": "Negative Tests",
-  "ayrshireandarran_cases": "Ayrshire and Arran Cases",
-  "borders_cases": "Borders Cases",
-  "dumfriesandgalloway_cases": "Dumfries and Galloway Cases",
-  "fife_cases": "Fife Cases",
-  "forthvalley_cases": "Forth Valley Cases",
-  "grampian_cases": "Grampian Cases",
-  "greaterglasgowandclyde_cases": "Greater Glasgow and Clyde Cases",
-  "highland_cases": "Highland Cases",
-  "lanarkshire_cases": "Lanarkshire Cases",
-  "lothian_cases": "Lothian Cases",
-  "orkney_cases": "Orkney Cases",
-  "shetland_cases": "Shetland Cases",
-  "tayside_cases": "Tayside Cases"
+  "totalTests": "Total Tests",
+  "totalDeaths": "Total Deaths",
+  "positiveTests": "Positive Tests",
+  "negativeTests": "Negative Tests",
+  "ayrshireandarranCases": "Ayrshire and Arran Cases",
+  "bordersCases": "Borders Cases",
+  "dumfriesandgallowayCases": "Dumfries and Galloway Cases",
+  "fifeCases": "Fife Cases",
+  "forthvalleyCases": "Forth Valley Cases",
+  "grampianCases": "Grampian Cases",
+  "greaterglasgowandclydeCases": "Greater Glasgow and Clyde Cases",
+  "highlandCases": "Highland Cases",
+  "lanarkshireCases": "Lanarkshire Cases",
+  "lothianCases": "Lothian Cases",
+  "orkneyCases": "Orkney Cases",
+  "shetlandCases": "Shetland Cases",
+  "taysideCases": "Tayside Cases"
 };
 
-const colors = availableLines.reduce((map, obj) => {
+const colors = allDataChannels.reduce((map, obj) => {
   map[obj] = randomcolor({ luminosity: 'light' });
   return map;
 }, {});
@@ -61,7 +61,7 @@ class App extends React.Component {
     super(props);
 
     // build state checkbox items out of the available data
-    this.state = availableLines.reduce((map, obj) => {
+    this.state = allDataChannels.reduce((map, obj) => {
       var key = obj + "_enabled";
       map[key] = false;
       return map;
@@ -76,27 +76,19 @@ class App extends React.Component {
   transformChartData(data) {
     let chartData = [];
     data.datasets.nodes.forEach((set, _) => {
-      let dataset = {
-        date: set.date.split("T")[0],
-        total_deaths: set.totalDeaths,
-        total_tests: set.totalTests,
-        positive_tests: set.positiveTests,
-        negative_tests: set.negativeTests,
-        ayrshireandarran_cases: set.ayrshireandarranCases,
-        borders_cases: set.bordersCases,
-        dumfriesandgalloway_cases: set.dumfriesandgallowayCases,
-        fife_cases: set.dumfriesandgallowayCases,
-        forthvalley_cases: set.forthvalleyCases,
-        grampian_cases: set.grampianCases,
-        greaterglasgowandclyde_cases: set.greaterglasgowandclydeCases,
-        highland_cases: set.highlandCases,
-        lanarkshire_cases: set.lanarkshireCases,
-        lothian_cases: set.lothianCases,
-        orkney_cases: set.orkneyCases,
-        shetland_cases: set.shetlandCases,
-        tayside_cases: set.taysideCases,
-      }
-      chartData.push(dataset);
+
+      let dataset = allDataChannels.reduce((map, obj) => {
+        map[obj] = set[obj];
+        return map;
+      }, {});
+      dataset['date'] = set.date.split("T")[0];
+
+      Object.keys(this.state).filter(item => item.endsWith('_enabled') && this.state[item] === true).forEach((channel, _) => {
+        var channelName = channel.split('_')[0];
+        if (this.state.graphScale === 'linear' || dataset[channelName] !== 0) {
+          chartData.push(dataset);
+        }
+      })
     })
     return chartData;
   }
@@ -122,7 +114,7 @@ class App extends React.Component {
                 <Paper style={{ marginLeft: 30 }}>
                   <Typography variant="h6" style={{ textAlign: "center", margin: 5 }}>Data Channels</Typography>
                   <FormGroup style={{ padding: 5 }}>
-                    {availableLines.map(line =>
+                    {allDataChannels.map(line =>
                       (
                         <FormControlLabel
                           control={<Checkbox checked={this.state[line + "_enabled"]} onChange={this.handleCheckboxChange} name={line + "_enabled"} />}
@@ -135,7 +127,7 @@ class App extends React.Component {
                       <Button onClick={() => this.selectAllChannels(false)} style={{ width: "100%" }}>Deselect all</Button>
                     </ButtonGroup>
                     <RadioGroup row aria-label="graph-scale" name="graphScale" value={this.state.graphScale} onChange={this.setGraphScale}>
-                      <FormLabel style={{display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: 20, marginLeft: 10 }}>
+                      <FormLabel style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: 20, marginLeft: 10 }}>
                         <Typography variant="button">Scale:</Typography>
                       </FormLabel>
                       <FormControlLabel value="log" control={<Radio />} label="log" />
@@ -145,13 +137,13 @@ class App extends React.Component {
                 </Paper>
               </Grid>
               <Grid item sm={10}>
-                <ResponsiveContainer>
-                  <LineChart data={this.transformChartData(data)} margin={{ top: 5, right: 30, bottom: 5 }}>
+                <ResponsiveContainer >
+                  <LineChart data={this.transformChartData(data)} margin={{ top: 5, right: 50, bottom: 5 }}>
                     <CartesianGrid stroke="#ccc" />
                     <Tooltip contentStyle={{ background: '#424242' }} />
                     <XAxis dataKey="date" />
-                    <YAxis scale={this.state.graphScale} domain={['auto', 'auto']} />
-                    {availableLines
+                    <YAxis scale={this.state.graphScale} domain={['1', 'auto']} />
+                    {allDataChannels
                       .filter(line => this.state[line + "_enabled"] === true)
                       .map(line =>
                         (
@@ -162,7 +154,8 @@ class App extends React.Component {
               </Grid>
               <Grid item sm={12}>
                 <BottomNavigation style={{ width: '100%', position: 'fixed', bottom: 0, maxHeight: 45 }}>
-                  <BottomNavigationAction icon={<GitHubIcon />} href="https://github.com/dillanmann/scotgov-covid-chart"></BottomNavigationAction>
+                  <BottomNavigationAction icon={<GitHub />} href="https://github.com/dillanmann/scotgov-covid-chart"></BottomNavigationAction>
+                  <BottomNavigationAction icon={<Twitter />} href="https://twitter.com/dillanmann"></BottomNavigationAction>
                 </BottomNavigation>
               </Grid>
             </Grid>
