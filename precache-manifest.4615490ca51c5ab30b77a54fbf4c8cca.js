@@ -1,23 +1,23 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "8905b6d169d3d70b52d9fbdc9b60c0f4",
+    "revision": "b456bebd4acd944677151963cc009714",
     "url": "/scotgov-covid-chart/index.html"
   },
   {
-    "revision": "c3864fb5a92936d873cb",
+    "revision": "bd49d1bddf6ebfd56fd2",
     "url": "/scotgov-covid-chart/static/css/main.5ecd60fb.chunk.css"
   },
   {
-    "revision": "845fc38f3b52f5d479f6",
-    "url": "/scotgov-covid-chart/static/js/2.47fcfa00.chunk.js"
+    "revision": "d3082bf15e7f8482cf50",
+    "url": "/scotgov-covid-chart/static/js/2.5c9151cb.chunk.js"
   },
   {
     "revision": "4d323e9b06b56bc96b0544f5ef818a27",
-    "url": "/scotgov-covid-chart/static/js/2.47fcfa00.chunk.js.LICENSE.txt"
+    "url": "/scotgov-covid-chart/static/js/2.5c9151cb.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "c3864fb5a92936d873cb",
-    "url": "/scotgov-covid-chart/static/js/main.f893c2c6.chunk.js"
+    "revision": "bd49d1bddf6ebfd56fd2",
+    "url": "/scotgov-covid-chart/static/js/main.98a048b1.chunk.js"
   },
   {
     "revision": "849240251fae81ea5035",

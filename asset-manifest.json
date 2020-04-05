@@ -1,22 +1,22 @@
 {
   "files": {
     "main.css": "/scotgov-covid-chart/static/css/main.5ecd60fb.chunk.css",
-    "main.js": "/scotgov-covid-chart/static/js/main.f893c2c6.chunk.js",
-    "main.js.map": "/scotgov-covid-chart/static/js/main.f893c2c6.chunk.js.map",
+    "main.js": "/scotgov-covid-chart/static/js/main.98a048b1.chunk.js",
+    "main.js.map": "/scotgov-covid-chart/static/js/main.98a048b1.chunk.js.map",
     "runtime-main.js": "/scotgov-covid-chart/static/js/runtime-main.2d3216ad.js",
     "runtime-main.js.map": "/scotgov-covid-chart/static/js/runtime-main.2d3216ad.js.map",
-    "static/js/2.47fcfa00.chunk.js": "/scotgov-covid-chart/static/js/2.47fcfa00.chunk.js",
-    "static/js/2.47fcfa00.chunk.js.map": "/scotgov-covid-chart/static/js/2.47fcfa00.chunk.js.map",
+    "static/js/2.5c9151cb.chunk.js": "/scotgov-covid-chart/static/js/2.5c9151cb.chunk.js",
+    "static/js/2.5c9151cb.chunk.js.map": "/scotgov-covid-chart/static/js/2.5c9151cb.chunk.js.map",
     "index.html": "/scotgov-covid-chart/index.html",
-    "precache-manifest.ba04cea35502d8d5b31bf427f906c4c5.js": "/scotgov-covid-chart/precache-manifest.ba04cea35502d8d5b31bf427f906c4c5.js",
+    "precache-manifest.4615490ca51c5ab30b77a54fbf4c8cca.js": "/scotgov-covid-chart/precache-manifest.4615490ca51c5ab30b77a54fbf4c8cca.js",
     "service-worker.js": "/scotgov-covid-chart/service-worker.js",
     "static/css/main.5ecd60fb.chunk.css.map": "/scotgov-covid-chart/static/css/main.5ecd60fb.chunk.css.map",
-    "static/js/2.47fcfa00.chunk.js.LICENSE.txt": "/scotgov-covid-chart/static/js/2.47fcfa00.chunk.js.LICENSE.txt"
+    "static/js/2.5c9151cb.chunk.js.LICENSE.txt": "/scotgov-covid-chart/static/js/2.5c9151cb.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.2d3216ad.js",
-    "static/js/2.47fcfa00.chunk.js",
+    "static/js/2.5c9151cb.chunk.js",
     "static/css/main.5ecd60fb.chunk.css",
-    "static/js/main.f893c2c6.chunk.js"
+    "static/js/main.98a048b1.chunk.js"
   ]
 }

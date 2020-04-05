@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/scotgov-covid-chart/precache-manifest.ba04cea35502d8d5b31bf427f906c4c5.js"
+  "/scotgov-covid-chart/precache-manifest.4615490ca51c5ab30b77a54fbf4c8cca.js"
 );
 
 self.addEventListener('message', (event) => {
