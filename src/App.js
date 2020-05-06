@@ -13,6 +13,7 @@ import { GET_DATASETS, ORDERBY_DATE_ASC } from './queries/GetDatasets'
 const allDataChannels = [
   "totalTests",
   "totalDeaths",
+  "dailyDeaths",
   "positiveTests",
   "negativeTests",
   "ayrshireandarranCases",
@@ -33,6 +34,7 @@ const allDataChannels = [
 const labels = {
   "totalTests": "Total Tests",
   "totalDeaths": "Total Deaths",
+  "dailyDeaths": "Daily Deaths",
   "positiveTests": "Positive Tests",
   "negativeTests": "Negative Tests",
   "ayrshireandarranCases": "Ayrshire and Arran Cases",
@@ -49,6 +51,7 @@ const labels = {
   "shetlandCases": "Shetland Cases",
   "taysideCases": "Tayside Cases"
 };
+
 
 const colors = allDataChannels.reduce((map, obj) => {
   map[obj] = randomcolor({ luminosity: 'light' });
@@ -75,13 +78,20 @@ class App extends React.Component {
 
   transformChartData(data) {
     let chartData = [];
-    data.datasets.nodes.forEach((set, _) => {
-
-      let dataset = allDataChannels.reduce((map, obj) => {
+    data.scrapedDatasets.nodes.forEach((set, _) => {
+      var dataset = allDataChannels.reduce((map, obj) => {
         map[obj] = set[obj];
         return map;
       }, {});
-      dataset['date'] = set.date.split("T")[0];
+      var date = set.date.split("T")[0];
+      dataset['date'] = date;
+
+      var calculatedSet = data.calculatedDatasets.nodes.find((e) => e.date.split('T')[0] === date);
+      if (calculatedSet){
+        console.log(date);
+        console.log(calculatedSet['dailyDeaths']);
+        dataset['dailyDeaths'] = calculatedSet['dailyDeaths'];
+      }
 
       Object.keys(this.state).filter(item => item.endsWith('_enabled') && this.state[item] === true).forEach((channel, _) => {
         var channelName = channel.split('_')[0];
@@ -107,10 +117,10 @@ class App extends React.Component {
         <Query query={GET_DATASETS} variables={ORDERBY_DATE_ASC}>
           {({ loading, data, refetch }) => !loading && (
             <Grid container>
-              <Grid item sm={12} style={{ textAlign: "center", margin: 5 }}>
+              <Grid item xs={12} style={{ textAlign: "center", margin: 5 }}>
                 <Typography variant="h3">ScotGov COVID-19 Data</Typography>
               </Grid>
-              <Grid item sm={2}>
+              <Grid item xs={2}>
                 <Paper style={{ marginLeft: 30 }}>
                   <Typography variant="h6" style={{ textAlign: "center", margin: 5 }}>Data Channels</Typography>
                   <FormGroup style={{ padding: 5 }}>
@@ -118,7 +128,7 @@ class App extends React.Component {
                       (
                         <FormControlLabel
                           control={<Checkbox checked={this.state[line + "_enabled"]} onChange={this.handleCheckboxChange} name={line + "_enabled"} />}
-                          label={labels[line]}
+                          label={<Typography variant="caption">{labels[line]}</Typography>}
                           key={line}
                         />
                       ))}
@@ -136,8 +146,8 @@ class App extends React.Component {
                   </FormGroup>
                 </Paper>
               </Grid>
-              <Grid item sm={10}>
-                <ResponsiveContainer >
+              <Grid item xs={10}>
+                <ResponsiveContainer width="99%" height="99%">
                   <LineChart data={this.transformChartData(data)} margin={{ top: 5, right: 50, bottom: 5 }}>
                     <CartesianGrid stroke="#ccc" />
                     <Tooltip contentStyle={{ background: '#424242' }} />
@@ -152,7 +162,7 @@ class App extends React.Component {
                   </LineChart>
                 </ResponsiveContainer>
               </Grid>
-              <Grid item sm={12}>
+              <Grid item xs={12}>
                 <BottomNavigation style={{ width: '100%', position: 'fixed', bottom: 0, maxHeight: 45 }}>
                   <BottomNavigationAction icon={<GitHub />} href="https://github.com/dillanmann/scotgov-covid-chart"></BottomNavigationAction>
                   <BottomNavigationAction icon={<Twitter />} href="https://twitter.com/dillanmann"></BottomNavigationAction>

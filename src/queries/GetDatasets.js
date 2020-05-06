@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
-export const GET_DATASETS = gql`query GetDatasets($order: DatasetsSort!){
-    datasets(order_by: $order)
+export const GET_DATASETS = gql`query GetDatasets($scrapedOrder: ScrapedDataSort!, $calculatedOrder: CalculatedDataSort!){
+  scrapedDatasets(order_by: $scrapedOrder)
     {
       nodes{
         date,
@@ -24,6 +24,13 @@ export const GET_DATASETS = gql`query GetDatasets($order: DatasetsSort!){
           taysideCases
       }
     }
+    calculatedDatasets(order_by: $calculatedOrder){
+      nodes{
+        date,
+        dailyDeaths
+      }
+    }
+    
   }`;
 
-export const ORDERBY_DATE_ASC = {"order": {"date": "ASC" }};
+export const ORDERBY_DATE_ASC = {"scrapedOrder": {"date": "ASC" }, "calculatedOrder": {"date": "ASC" }};

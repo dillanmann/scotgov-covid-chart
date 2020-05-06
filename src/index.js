@@ -4,17 +4,17 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { ThemeProvider } from '@material-ui/styles';
-import { createMuiTheme, CssBaseline } from "@material-ui/core";
+import { createMuiTheme, responsiveFontSizes, CssBaseline } from "@material-ui/core";
 
-const darkTheme = createMuiTheme({
+const theme = responsiveFontSizes(createMuiTheme({
   palette: {
     type: 'dark',
   },
-});
+}));
 
 ReactDOM.render(
   <React.StrictMode>
-    <ThemeProvider theme={darkTheme}>
+    <ThemeProvider theme={theme}>
       <CssBaseline>
         <App />
       </CssBaseline>
