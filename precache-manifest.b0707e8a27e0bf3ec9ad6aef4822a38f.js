@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "6a21f2eb0d00496f4ec314912402f8e9",
+    "revision": "fcedd5fe056eac87c5b0c86bf6290759",
     "url": "/scotgov-covid-chart/index.html"
   },
   {
-    "revision": "3127c55571d46d3ccb6d",
+    "revision": "d8b430d3562e6ab7375b",
     "url": "/scotgov-covid-chart/static/css/main.5ecd60fb.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/scotgov-covid-chart/static/js/2.5ffc812f.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "3127c55571d46d3ccb6d",
-    "url": "/scotgov-covid-chart/static/js/main.5c7aef5a.chunk.js"
+    "revision": "d8b430d3562e6ab7375b",
+    "url": "/scotgov-covid-chart/static/js/main.267b496e.chunk.js"
   },
   {
     "revision": "849240251fae81ea5035",
