@@ -88,17 +88,17 @@ class App extends React.Component {
 
       var calculatedSet = data.calculatedDatasets.nodes.find((e) => e.date.split('T')[0] === date);
       if (calculatedSet){
-        console.log(date);
-        console.log(calculatedSet['dailyDeaths']);
         dataset['dailyDeaths'] = calculatedSet['dailyDeaths'];
       }
 
-      Object.keys(this.state).filter(item => item.endsWith('_enabled') && this.state[item] === true).forEach((channel, _) => {
-        var channelName = channel.split('_')[0];
-        if (this.state.graphScale === 'linear' || dataset[channelName] !== 0) {
+      var selectedChannels = 
+        Object.keys(this.state)
+        .filter(item => item.endsWith('_enabled') && this.state[item] === true);
+
+      if (this.state.graphScale === "linear"
+        || selectedChannels.every(i => dataset[i] !== 0)){
           chartData.push(dataset);
         }
-      })
     })
     return chartData;
   }
